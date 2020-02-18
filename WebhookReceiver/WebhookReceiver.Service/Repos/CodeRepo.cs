@@ -32,15 +32,17 @@ namespace WebhookReceiver.Service.Repos
         {
 
             //Get pull request details
-            PullRequest pr = new PullRequest();
-            pr.Id = payload["resource"]["pullRequestId"] == null ? -1 : Convert.ToInt32(payload["resource"]["pullRequestId"].ToString());
-            pr.Status = payload["resource"]["status"]?.ToString();
-            pr.Title = payload["resource"]["title"]?.ToString();
+            PullRequest pr = new PullRequest
+            {
+                Id = payload["resource"]["pullRequestId"] == null ? -1 : Convert.ToInt32(payload["resource"]["pullRequestId"].ToString()),
+                Status = payload["resource"]["status"]?.ToString(),
+                Title = payload["resource"]["title"]?.ToString()
+            };
 
             //Delete the resource group
             resourceGroupName = resourceGroupName.Replace("__###__", "PR" + pr.Id.ToString());
 
-            if (pr != null && pr.Status == "completed")
+            if (pr != null && (pr.Status == "completed" || pr.Status == "abandoned"))
             {
                 var creds = new AzureCredentialsFactory().FromServicePrincipal(clientId, clientSecret, tenantId, AzureEnvironment.AzureGlobalCloud);
                 var azure = Azure.Authenticate(creds).WithSubscription(subscriptionId);
