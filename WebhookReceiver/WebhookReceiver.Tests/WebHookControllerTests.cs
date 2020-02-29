@@ -21,59 +21,17 @@ namespace WebhookReceiver.Tests
     [TestClass]
     public class WebHookControllerTests
     {
-        //[TestMethod]
-        //public async Task PostTest()
-        //{
-        //    //Arrange
-        //    IConfigurationBuilder config = new ConfigurationBuilder()
-        //       .SetBasePath(AppContext.BaseDirectory)
-        //       .AddJsonFile("appsettings.json");
-        //    IConfiguration configuration = config.Build();
-        //    TestServer _server = new TestServer(WebHost.CreateDefaultBuilder()
-        //        .UseConfiguration(configuration)
-        //        .UseStartup<Startup>());
-        //    HttpClient _client = _server.CreateClient();
-        //    string username = "";
-        //    string password = configuration["AppSettings:AzureDevOpsToken"];
-        //    string svcCredentials = Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(username + ":" + password));
-        //    _client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Basic " + svcCredentials);
-        //    _client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
-        //    _client.BaseAddress = new Uri(@"https://localhost:44350/");
-        //    JObject payload;
 
-        //    //Act
+        private IConfigurationRoot Configuration;
+        private string ClientId;
+        private string ClientSecret;
+        private string TenantId;
+        private string SubscriptionId;
+        private string ResourceGroupName;
 
-        //    // read JSON directly from a file
-        //    using (StreamReader file = System.IO.File.OpenText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Sample\sample.json"))
-        //    {
-        //        using (JsonTextReader reader = new JsonTextReader(file))
-        //        {
-        //            payload = (JObject)JToken.ReadFrom(reader);
-        //        }
-        //    }
-
-        //    StringContent content = new StringContent(payload.ToString(), Encoding.UTF8, "application/json");
-
-        //    HttpResponseMessage response = await _client.PostAsync(@"api/webhooks", content);
-
-        //    //Assert
-        //    Assert.IsTrue(response != null);
-
-        //}
-
-        [TestMethod]
-        public async Task ProcessingSamplePayloadTest()
+        [TestInitialize]
+        public void InitializeTests()
         {
-            //Arrange
-            JObject payload;
-            // read JSON directly from a file
-            using (StreamReader file = System.IO.File.OpenText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\Sample\sample.json"))
-            {
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    payload = (JObject)JToken.ReadFrom(reader);
-                }
-            }
             //Key vault access
             IConfigurationBuilder config = new ConfigurationBuilder()
                .SetBasePath(AppContext.BaseDirectory)
@@ -85,23 +43,60 @@ namespace WebhookReceiver.Tests
             string keyVaultClientSecret = Configuration["AppSettings:ClientSecret"];
             config.AddAzureKeyVault(azureKeyVaultURL, keyVaultClientId, keyVaultClientSecret);
             Configuration = config.Build();
-            
+
             //Setup the repo
+            ClientId = Configuration["WebhookClientId"];
+            ClientSecret = Configuration["WebhookClientSecret"];
+            TenantId = Configuration["WebhookTenantId"];
+            SubscriptionId = Configuration["WebhookSubscriptionId"];
+            ResourceGroupName = Configuration["WebhookResourceGroup"];
+        }
+
+        [TestMethod]
+        public async Task ProcessingSamplePayloadTest()
+        {
+            //Arrange
+            JObject payload = ReadJSON(@"\Sample\sample.json");
             CodeRepo code = new CodeRepo();
-            string clientId = Configuration["WebhookClientId"];
-            string clientSecret = Configuration["WebhookClientSecret"];
-            string tenantId = Configuration["WebhookTenantId"];
-            string subscriptionId = Configuration["WebhookSubscriptionId"];
-            string resourceGroupName = Configuration["WebhookResourceGroup"];
 
             //Act
-            PullRequest pr = await code.ProcessPullRequest(payload, clientId, clientSecret, tenantId, subscriptionId, resourceGroupName);
+            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
 
             //Assert
             Assert.IsTrue(pr != null);
             Assert.IsTrue(pr.Id == 1);
             Assert.IsTrue(pr.Status == "completed");
             Assert.IsTrue(pr.Title == "my first pull request");
+        }
+
+        [TestMethod]
+        public async Task ProcessingEmptyPayloadTest()
+        {
+            //Arrange
+            JObject payload = ReadJSON(@"\Sample\emptySample.json");
+            CodeRepo code = new CodeRepo();
+
+            //Act
+            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+
+            //Assert
+            Assert.IsTrue(pr == null);
+        }
+
+
+        private JObject ReadJSON(string fileName)
+        {
+            JObject payload;
+            // read JSON directly from a file
+            using (StreamReader file = System.IO.File.OpenText(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + fileName))
+            {
+                using (JsonTextReader reader = new JsonTextReader(file))
+                {
+                    payload = (JObject)JToken.ReadFrom(reader);
+                }
+            }
+
+            return payload;
         }
     }
 }
