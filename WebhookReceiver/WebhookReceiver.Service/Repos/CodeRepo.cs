@@ -1,26 +1,8 @@
-﻿
-using Hyak.Common;
-using Microsoft.Azure;
-using Microsoft.Azure.Management.ContainerRegistry.Fluent.Models;
-using Microsoft.Azure.Management.Fluent;
-using Microsoft.Azure.Management.ManagementGroups;
+﻿using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.Rest;
-using Microsoft.VisualStudio.Services.Commerce;
-//using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
-//using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
-using Microsoft.VisualStudio.Services.Common;
-using Microsoft.VisualStudio.Services.WebApi;
-using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using WebhookReceiver.Service.Models;
 
@@ -30,6 +12,23 @@ namespace WebhookReceiver.Service.Repos
     {
         public async Task<PullRequest> ProcessPullRequest(JObject payload, string clientId, string clientSecret, string tenantId, string subscriptionId, string resourceGroupName)
         {
+            //Validate the payload
+            if (payload["resource"] == null)
+            {
+                return null;
+            }
+            else if (payload["resource"]["status"] == null)
+            {
+                return null;
+            }
+            else if (payload["resource"]["title"] == null)
+            {
+                return null;
+            }    
+            else if (string.IsNullOrEmpty(clientId) == true || string.IsNullOrEmpty(clientSecret) == true || string.IsNullOrEmpty(tenantId) == true || string.IsNullOrEmpty(subscriptionId) == true || string.IsNullOrEmpty(resourceGroupName) == true)
+            {
+                return null;
+            }
 
             //Get pull request details
             PullRequest pr = new PullRequest
