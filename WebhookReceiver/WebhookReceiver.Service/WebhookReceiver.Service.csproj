@@ -8,6 +8,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <ApplicationInsightsResourceId>/subscriptions/07db7d0b-a6cb-4e58-b07e-e1d541c39f5b/resourcegroups/SamLearnsAzureData/providers/microsoft.insights/components/samsapp-data-eu-appinsights</ApplicationInsightsResourceId>
+    <UserSecretsId>450c40f0-f452-44a8-9e0e-ab48bb59e530</UserSecretsId>
   </PropertyGroup>
   
   <ItemGroup>
