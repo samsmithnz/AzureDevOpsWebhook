@@ -25,6 +25,7 @@ namespace WebhookReceiver.Service
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     //Load the appsettings.json configuration file
+                    config.AddUserSecrets<Program>();
                     IConfigurationRoot buildConfig = config.Build();
 
                     //Load a connection to our Azure key vault instance
