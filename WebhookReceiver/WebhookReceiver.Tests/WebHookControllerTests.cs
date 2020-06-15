@@ -35,7 +35,8 @@ namespace WebhookReceiver.Tests
             //Key vault access
             IConfigurationBuilder config = new ConfigurationBuilder()
                .SetBasePath(AppContext.BaseDirectory)
-               .AddJsonFile("appsettings.json");
+               .AddJsonFile("appsettings.json")
+               .AddUserSecrets<WebHookControllerTests>();
             IConfigurationRoot Configuration = config.Build();
 
             string azureKeyVaultURL = Configuration["AppSettings:KeyVaultURL"];
@@ -56,7 +57,7 @@ namespace WebhookReceiver.Tests
         public async Task ProcessingSamplePayloadTest()
         {
             //Arrange
-            JObject payload = ReadJSON(@"\Sample\sample.json");
+            JObject payload = ReadJSON(@"/Sample/sample.json");
             CodeRepo code = new CodeRepo();
 
             //Act
@@ -73,7 +74,7 @@ namespace WebhookReceiver.Tests
         public async Task ProcessingEmptyPayloadTest()
         {
             //Arrange
-            JObject payload = ReadJSON(@"\Sample\emptySample.json");
+            JObject payload = ReadJSON(@"/Sample/emptySample.json");
             CodeRepo code = new CodeRepo();
 
             //Act
