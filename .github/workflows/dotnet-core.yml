@@ -46,5 +46,5 @@ jobs:
       uses: Azure/webapps-deploy@v1
       with:
         app-name: samsapp-data-eu-webhook
-        package: WebhookReceiver/WebhookReceiver.Tests/bin/Release/netcoreapp3.1   
+        package: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1   
     - run: az webapp config appsettings set --name "samsapp-data-eu-webhook" --resource-group "SamLearnsAzureData" --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
