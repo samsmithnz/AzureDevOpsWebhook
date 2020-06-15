@@ -27,15 +27,18 @@ jobs:
         AppSettings.ClientSecret: "${{ secrets.ClientSecret }}"    
     - name: Build test project
       run: dotnet build WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
-    - run: |
-        cd WebhookReceiver/WebhookReceiver.Tests/bin/Release/netcoreapp3.1
-        dir
     - name: Run automated unit and integration tests
       run: dotnet test WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
       run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
+    #Publish build artifacts to GitHub
+    - name: Upload web service build artifacts back to GitHub
+      uses: actions/upload-artifact@master
+      with:
+        name: serviceapp
+        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
 
     - name: Log into Azure
       uses: azure/login@v1
@@ -46,5 +49,5 @@ jobs:
       uses: Azure/webapps-deploy@v1
       with:
         app-name: samsapp-data-eu-webhook
-        package: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1   
+        package: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish 
     - run: az webapp config appsettings set --name "samsapp-data-eu-webhook" --resource-group "SamLearnsAzureData" --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
