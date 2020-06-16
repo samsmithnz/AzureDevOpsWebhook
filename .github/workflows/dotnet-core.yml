@@ -24,8 +24,8 @@ jobs:
         files: 'WebhookReceiver/WebhookReceiver.Tests/appsettings.json'
       env:
         AppSettings.ClientSecret: "${{ secrets.ClientSecret }}"    
-    - name: Build test project
-      run: dotnet build WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
+    #- name: Build test project
+    #  run: dotnet build WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
     - name: Run automated unit and integration tests
       run: dotnet test WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
 
@@ -38,6 +38,9 @@ jobs:
       with:
         name: serviceapp
         path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
+    - run: |
+         cd WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
+         dir 
 
   deploy:
     runs-on: windows-latest
