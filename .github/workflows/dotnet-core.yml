@@ -38,9 +38,6 @@ jobs:
       with:
         name: serviceapp
         path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
-    - run: |
-         cd WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
-         dir 
 
   deploy:
     runs-on: windows-latest
