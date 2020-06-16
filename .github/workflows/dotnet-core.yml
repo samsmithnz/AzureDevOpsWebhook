@@ -31,7 +31,7 @@ jobs:
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
-      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release -p:PublishSingleFile=true
+      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
     #Publish build artifacts to GitHub
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
@@ -61,4 +61,5 @@ jobs:
       with:
         app-name: samsapp-data-eu-webhook
         package: serviceapp
+        slot-name: production
     - run: az webapp config appsettings set --name "samsapp-data-eu-webhook" --resource-group "SamLearnsAzureData" --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
