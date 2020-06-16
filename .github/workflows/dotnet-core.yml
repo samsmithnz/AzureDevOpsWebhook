@@ -31,7 +31,7 @@ jobs:
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
-      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
+      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release -p:PublishSingleFile=true
     #Publish build artifacts to GitHub
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
