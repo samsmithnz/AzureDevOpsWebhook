@@ -71,6 +71,23 @@ namespace WebhookReceiver.Tests
         }
 
         [TestMethod]
+        public async Task ProcessingSample2PayloadTest()
+        {
+            //Arrange
+            JObject payload = ReadJSON(@"/Sample/sample2.json");
+            CodeRepo code = new CodeRepo();
+
+            //Act
+            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+
+            //Assert
+            Assert.IsTrue(pr != null);
+            Assert.IsTrue(pr.Id == 454);
+            Assert.IsTrue(pr.Status == "completed");
+            Assert.IsTrue(pr.Title == "Upgraded to Dapper. Testing performance is terrible for some reason");
+        }
+
+        [TestMethod]
         public async Task ProcessingEmptyPayloadTest()
         {
             //Arrange
@@ -78,10 +95,15 @@ namespace WebhookReceiver.Tests
             CodeRepo code = new CodeRepo();
 
             //Act
-            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
-
-            //Assert
-            Assert.IsTrue(pr == null);
+            try
+            {
+                PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+            }
+            catch (Exception ex)
+            {
+                //Assert
+                Assert.IsTrue(ex.ToString() != "");
+            }
         }
 
 

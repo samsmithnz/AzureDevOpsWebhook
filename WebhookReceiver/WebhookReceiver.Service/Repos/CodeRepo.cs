@@ -15,19 +15,39 @@ namespace WebhookReceiver.Service.Repos
             //Validate the payload
             if (payload["resource"] == null)
             {
-                return null;
+                throw new Exception("Payload resource is null");
             }
             else if (payload["resource"]["status"] == null)
             {
-                return null;
+                throw new Exception("Payload resource status is null");
             }
             else if (payload["resource"]["title"] == null)
             {
-                return null;
-            }    
-            else if (string.IsNullOrEmpty(clientId) == true || string.IsNullOrEmpty(clientSecret) == true || string.IsNullOrEmpty(tenantId) == true || string.IsNullOrEmpty(subscriptionId) == true || string.IsNullOrEmpty(resourceGroupName) == true)
+                throw new Exception("Payload title is null");
+            }
+            else if (payload["resource"]["pullRequestId"] == null)
             {
-                return null;
+                throw new Exception("Payload pullRequestId is null");
+            }
+            else if (string.IsNullOrEmpty(clientId) == true)
+            {
+                throw new Exception("Misconfiguration: client id is null");
+            }
+            else if (string.IsNullOrEmpty(clientSecret) == true)
+            {
+                throw new Exception("Misconfiguration: client secret is null");
+            }
+            else if (string.IsNullOrEmpty(tenantId) == true)
+            {
+                throw new Exception("Misconfiguration: tenant id is null");
+            }
+            else if (string.IsNullOrEmpty(subscriptionId) == true)
+            {
+                throw new Exception("Misconfiguration: subscription id is null");
+            }
+            else if (string.IsNullOrEmpty(resourceGroupName) == true)
+            {
+                throw new Exception("Misconfiguration: resource group is null");
             }
 
             //Get pull request details
