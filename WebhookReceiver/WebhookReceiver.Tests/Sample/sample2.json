@@ -1,0 +1,155 @@
+{
+  "subscriptionId": "dd2d1c33-a171-4bbe-9686-b67accac10b7",
+  "notificationId": 197,
+  "id": "b2f99cf4-1e38-4e64-9469-43c38481a066",
+  "eventType": "git.pullrequest.updated",
+  "publisherId": "tfs",
+  "message": {
+    "text": "Sam Smith completed pull request 454 (Upgraded to Dapper. Testing performance is terrible for some reason) in SamLearnsAzure\r\nhttps://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/",
+    "html": "Sam Smith completed <a href=\"https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/pullrequest/454\">pull request 454</a> (Upgraded to Dapper. Testing performance is terrible for some reason) in <a href=\"https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/\">SamLearnsAzure</a>",
+    "markdown": "Sam Smith completed [pull request 454](https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/pullrequest/454) (Upgraded to Dapper. Testing performance is terrible for some reason) in [SamLearnsAzure](https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/)"
+  },
+  "detailedMessage": {
+    "text": "Sam Smith completed pull request 454 (Upgraded to Dapper. Testing performance is terrible for some reason) in SamLearnsAzure\r\nhttps://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/\r\nUpgraded to Dapper. Testing performance is terrible for some reason\r\n",
+    "html": "Sam Smith completed <a href=\"https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/pullrequest/454\">pull request 454</a> (Upgraded to Dapper. Testing performance is terrible for some reason) in <a href=\"https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/\">SamLearnsAzure</a><p>Upgraded to Dapper. Testing performance is terrible for some reason</p>",
+    "markdown": "Sam Smith completed [pull request 454](https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/pullrequest/454) (Upgraded to Dapper. Testing performance is terrible for some reason) in [SamLearnsAzure](https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/)\r\nUpgraded to Dapper. Testing performance is terrible for some reason\r\n"
+  },
+  "resource": {
+    "repository": {
+      "id": "92bb190e-4673-42d2-8667-e6d6aaa1b2a7",
+      "name": "SamLearnsAzure",
+      "url": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7",
+      "project": {
+        "id": "610e9b27-3ad2-438a-8b01-f9028fee4077",
+        "name": "SamLearnsAzure",
+        "description": "There are 3 main goals of this project, focused on building infrastructure, developing features, and using monitoring to generate feedback \n- Infrastructure: using Azure, create a secure, scalable, and reliable web solution: https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/app-service-web-app/multi-region\n- Development: using Azure DevOps, create a workflow to streamline the delivery of value to end users, using tracking, development, and testing: https://docs.microsoft.com/en-us/azure/architecture/example-scenario/apps/devops-dotnet-webapp\n- Feedback: using Azure Monitor, create a series of dashboards and alerts to understand bottlenecks, discover and debug issues and learn from user actions: https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/app-service-web-app/app-monitoring\n\nYou can follow the blog at https://SamLearnsAzure.blog\nYou can view the product at https://SamLearnsAzure.com",
+        "url": "https://dev.azure.com/samsmithnz/_apis/projects/610e9b27-3ad2-438a-8b01-f9028fee4077",
+        "state": "wellFormed",
+        "revision": 448701499,
+        "visibility": "public",
+        "lastUpdateTime": "2019-09-08T00:55:36.92Z"
+      },
+      "size": 1800005,
+      "remoteUrl": "https://samsmithnz@dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure",
+      "sshUrl": "git@ssh.dev.azure.com:v3/samsmithnz/SamLearnsAzure/SamLearnsAzure",
+      "webUrl": "https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure"
+    },
+    "pullRequestId": 467,
+    "codeReviewId": 467,
+    "status": "completed",
+    "createdBy": {
+      "displayName": "Sam Smith",
+      "url": "https://spsprodeus22.vssps.visualstudio.com/Ad745d903-636a-4595-be70-47c113499825/_apis/Identities/e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "_links": {
+        "avatar": {
+          "href": "https://dev.azure.com/samsmithnz/_apis/GraphProfile/MemberAvatars/msa.Y2M0YjBmODMtZjgxOS03ZDQ1LTg5M2QtNThlZDg4MWNmMWZi"
+        }
+      },
+      "id": "e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "uniqueName": "samsmithnz@gmail.com",
+      "imageUrl": "https://dev.azure.com/samsmithnz/_api/_common/identityImage?id=e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "descriptor": "msa.Y2M0YjBmODMtZjgxOS03ZDQ1LTg5M2QtNThlZDg4MWNmMWZi"
+    },
+    "creationDate": "2020-06-16T23:10:11.4687703Z",
+    "closedDate": "2020-06-17T12:40:30.7550678Z",
+    "title": "Upgraded to Dapper. Testing performance is terrible for some reason",
+    "description": "Upgraded to Dapper. Testing performance is terrible for some reason",
+    "sourceRefName": "refs/heads/DapperPOC",
+    "targetRefName": "refs/heads/master",
+    "mergeStatus": "succeeded",
+    "isDraft": false,
+    "mergeId": "7857edb7-350e-48ee-bc25-030983d2cae6",
+    "lastMergeSourceCommit": {
+      "commitId": "79d63950d6440acc19b7ddedfbffe28a1604d5d8",
+      "url": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/commits/79d63950d6440acc19b7ddedfbffe28a1604d5d8"
+    },
+    "lastMergeTargetCommit": {
+      "commitId": "3bdd85d92a6cea5f259deaa53e5d4fed366478e2",
+      "url": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/commits/3bdd85d92a6cea5f259deaa53e5d4fed366478e2"
+    },
+    "lastMergeCommit": {
+      "commitId": "2014d2e155dfcb9deed2a17bb3253035d49f1f5e",
+      "author": {
+        "name": "Sam Smith",
+        "email": "samsmithnz@gmail.com",
+        "date": "2020-06-17T12:40:29Z"
+      },
+      "committer": {
+        "name": "Sam Smith",
+        "email": "samsmithnz@gmail.com",
+        "date": "2020-06-17T12:40:29Z"
+      },
+      "comment": "Merged PR 454: Upgraded to Dapper. Testing performance is terrible for some reason",
+      "commentTruncated": true,
+      "url": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/commits/2014d2e155dfcb9deed2a17bb3253035d49f1f5e"
+    },
+    "reviewers": [
+      {
+        "reviewerUrl": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/pullRequests/454/reviewers/e700cfd6-172a-48eb-8190-2a8a15c90455",
+        "vote": 10,
+        "hasDeclined": false,
+        "isFlagged": false,
+        "displayName": "Sam Smith",
+        "url": "https://spsprodeus22.vssps.visualstudio.com/Ad745d903-636a-4595-be70-47c113499825/_apis/Identities/e700cfd6-172a-48eb-8190-2a8a15c90455",
+        "_links": {
+          "avatar": {
+            "href": "https://dev.azure.com/samsmithnz/_apis/GraphProfile/MemberAvatars/msa.Y2M0YjBmODMtZjgxOS03ZDQ1LTg5M2QtNThlZDg4MWNmMWZi"
+          }
+        },
+        "id": "e700cfd6-172a-48eb-8190-2a8a15c90455",
+        "uniqueName": "samsmithnz@gmail.com",
+        "imageUrl": "https://dev.azure.com/samsmithnz/_api/_common/identityImage?id=e700cfd6-172a-48eb-8190-2a8a15c90455"
+      }
+    ],
+    "url": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/pullRequests/454",
+    "_links": {
+      "web": {
+        "href": "https://dev.azure.com/samsmithnz/SamLearnsAzure/_git/SamLearnsAzure/pullrequest/454"
+      },
+      "statuses": {
+        "href": "https://dev.azure.com/samsmithnz/610e9b27-3ad2-438a-8b01-f9028fee4077/_apis/git/repositories/92bb190e-4673-42d2-8667-e6d6aaa1b2a7/pullRequests/454/statuses"
+      }
+    },
+    "completionOptions": {
+      "mergeCommitMessage": "Merged PR 454: Upgraded to Dapper. Testing performance is terrible for some reason\n\nUpgraded to Dapper. Testing performance is terrible for some reason\n\nRelated work items: #2363",
+      "deleteSourceBranch": true,
+      "squashMerge": true,
+      "mergeStrategy": "squash",
+      "bypassReason": "",
+      "transitionWorkItems": true,
+      "triggeredByAutoComplete": true
+    },
+    "supportsIterations": true,
+    "completionQueueTime": "2020-06-17T12:40:29.5533363Z",
+    "closedBy": {
+      "displayName": "Sam Smith",
+      "url": "https://spsprodeus22.vssps.visualstudio.com/Ad745d903-636a-4595-be70-47c113499825/_apis/Identities/e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "_links": {
+        "avatar": {
+          "href": "https://dev.azure.com/samsmithnz/_apis/GraphProfile/MemberAvatars/msa.Y2M0YjBmODMtZjgxOS03ZDQ1LTg5M2QtNThlZDg4MWNmMWZi"
+        }
+      },
+      "id": "e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "uniqueName": "samsmithnz@gmail.com",
+      "imageUrl": "https://dev.azure.com/samsmithnz/_api/_common/identityImage?id=e700cfd6-172a-48eb-8190-2a8a15c90455",
+      "descriptor": "msa.Y2M0YjBmODMtZjgxOS03ZDQ1LTg5M2QtNThlZDg4MWNmMWZi"
+    },
+    "artifactId": "vstfs:///Git/PullRequestId/610e9b27-3ad2-438a-8b01-f9028fee4077%2f92bb190e-4673-42d2-8667-e6d6aaa1b2a7%2f454"
+  },
+  "resourceVersion": "1.0",
+  "resourceContainers": {
+    "collection": {
+      "id": "06ff4ef5-740b-460b-97c9-47daf30493fd",
+      "baseUrl": "https://dev.azure.com/samsmithnz/"
+    },
+    "account": {
+      "id": "d745d903-636a-4595-be70-47c113499825",
+      "baseUrl": "https://dev.azure.com/samsmithnz/"
+    },
+    "project": {
+      "id": "610e9b27-3ad2-438a-8b01-f9028fee4077",
+      "baseUrl": "https://dev.azure.com/samsmithnz/"
+    }
+  },
+  "createdDate": "2020-06-17T12:40:36.6961026Z"
+}

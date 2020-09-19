@@ -26,16 +26,22 @@ namespace WebhookReceiver.Service
                 {
                     //Load the appsettings.json configuration file
                     config.AddUserSecrets<Program>();
-                    IConfigurationRoot buildConfig = config.Build();
+                    IConfigurationRoot configuration = config.Build();
+
+                    string azureKeyVaultURL = configuration["AppSettings:KeyVaultURL"];
+                    string keyVaultClientId = configuration["AppSettings:ClientId"];
+                    string keyVaultClientSecret = configuration["AppSettings:ClientSecret"];
+                    config.AddAzureKeyVault(azureKeyVaultURL, keyVaultClientId, keyVaultClientSecret);
 
                     //Load a connection to our Azure key vault instance
                     AzureServiceTokenProvider azureServiceTokenProvider = new AzureServiceTokenProvider();
                     KeyVaultClient keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
-                    config.AddAzureKeyVault(buildConfig["AppSettings:KeyVaultURL"], keyVaultClient, new DefaultKeyVaultSecretManager());
+                    config.AddAzureKeyVault(azureKeyVaultURL, keyVaultClientId, keyVaultClientSecret);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.CaptureStartupErrors(true);
                 });
         }
     }

@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.x
 
     #Build and test service
     - name: Variable Substitution appsettings file for tests
@@ -36,7 +36,7 @@ jobs:
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
       with:
-        name: serviceapp
+        name: webhookapp
         path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
 
   deploy:
@@ -49,14 +49,13 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_SP }}  
     #Download the artifacts from GitHub
-    - name: Download serviceapp artifact
+    - name: Download webhookapp artifact
       uses: actions/download-artifact@v1.0.0
       with:
-        name: serviceapp
+        name: webhookapp
     - name: Deploy web service to Azure WebApp
       uses: Azure/webapps-deploy@v1
       with:
         app-name: samsapp-data-eu-webhook
-        package: serviceapp
-        slot-name: production
-    - run: az webapp config appsettings set --name "samsapp-data-eu-webhook" --resource-group "SamLearnsAzureData" --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
+        package: webhookapp
+    - run: az webapp config appsettings set --name samsapp-data-eu-webhook --resource-group SamLearnsAzureData --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
