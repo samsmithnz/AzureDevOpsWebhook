@@ -77,7 +77,24 @@ namespace WebhookReceiver.Tests
             Assert.AreEqual(467, pr.Id);
             Assert.AreEqual("completed", pr.Status);
             Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
-        }
+        } 
+        
+        //[TestMethod]
+        //public async Task ProcessingSample3PayloadTest()
+        //{
+        //    //Arrange
+        //    JObject payload = ReadJSON(@"/Sample/sample3.json");
+        //    CodeRepo code = new CodeRepo();
+
+        //    //Act
+        //    PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+
+        //    //Assert
+        //    Assert.IsTrue(pr != null);
+        //    Assert.AreEqual(467, pr.Id);
+        //    Assert.AreEqual("completed", pr.Status);
+        //    Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
+        //}
 
         [TestMethod]
         public async Task ProcessingEmptyPayloadTest()
