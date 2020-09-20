@@ -45,11 +45,45 @@ namespace WebhookReceiver.Tests
             ResourceGroupName = Configuration["WebhookResourceGroup"];
         }
 
+        [TestMethod]
+        public async Task ProcessingSamplePayloadTest()
+        {
+            //Arrange
+            JObject payload = ReadJSON(@"/Sample/sample.json");
+            CodeRepo code = new CodeRepo();
+
+            //Act
+            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+
+            //Assert
+            Assert.IsTrue(pr != null);
+            Assert.AreEqual(1, pr.Id);
+            Assert.AreEqual("completed", pr.Status);
+            Assert.AreEqual("my first pull request", pr.Title);
+        }
+
+        [TestMethod]
+        public async Task ProcessingSample2PayloadTest()
+        {
+            //Arrange
+            JObject payload = ReadJSON(@"/Sample/sample2.json");
+            CodeRepo code = new CodeRepo();
+
+            //Act
+            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+
+            //Assert
+            Assert.IsTrue(pr != null);
+            Assert.AreEqual(467, pr.Id);
+            Assert.AreEqual("completed", pr.Status);
+            Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
+        } 
+        
         //[TestMethod]
-        //public async Task ProcessingSamplePayloadTest()
+        //public async Task ProcessingSample3PayloadTest()
         //{
         //    //Arrange
-        //    JObject payload = ReadJSON(@"/Sample/sample.json");
+        //    JObject payload = ReadJSON(@"/Sample/sample3.json");
         //    CodeRepo code = new CodeRepo();
 
         //    //Act
@@ -57,26 +91,9 @@ namespace WebhookReceiver.Tests
 
         //    //Assert
         //    Assert.IsTrue(pr != null);
-        //    Assert.IsTrue(pr.Id == 1);
-        //    Assert.IsTrue(pr.Status == "completed");
-        //    Assert.IsTrue(pr.Title == "my first pull request");
-        //}
-
-        //[TestMethod]
-        //public async Task ProcessingSample2PayloadTest()
-        //{
-        //    //Arrange
-        //    JObject payload = ReadJSON(@"/Sample/sample2.json");
-        //    CodeRepo code = new CodeRepo();
-
-        //    //Act
-        //    PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
-
-        //    //Assert
-        //    Assert.IsTrue(pr != null);
-        //    Assert.IsTrue(pr.Id == 454);
-        //    Assert.IsTrue(pr.Status == "completed");
-        //    Assert.IsTrue(pr.Title == "Upgraded to Dapper. Testing performance is terrible for some reason");
+        //    Assert.AreEqual(467, pr.Id);
+        //    Assert.AreEqual("completed", pr.Status);
+        //    Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
         //}
 
         [TestMethod]

@@ -13,6 +13,7 @@
     <None Remove="Sample\emptySample.json" />
     <None Remove="Sample\sample.json" />
     <None Remove="Sample\sample2.json" />
+    <None Remove="Sample\sample3.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,11 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="Sample\emptySample.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Sample\sample3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
