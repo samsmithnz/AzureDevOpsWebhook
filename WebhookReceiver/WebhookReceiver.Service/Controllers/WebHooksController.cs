@@ -29,7 +29,7 @@ namespace WebhookReceiver.Service.Controllers
             string clientSecret = _configuration["AppSettings:ClientSecret"];
             //string clientId = _configuration["WebhookClientId"];
             //string clientSecret = _configuration["WebhookClientSecret"];
-            string tenantId = _configuration["WebhookTenantId"];
+            string tenantId = _configuration["AppSettings:WebhookTenantId"];
             string subscriptionId = _configuration["WebhookSubscriptionId"];
             string resourceGroupName = _configuration["WebhookResourceGroup"];
 
