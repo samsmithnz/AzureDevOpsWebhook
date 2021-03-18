@@ -24,20 +24,18 @@ jobs:
         files: 'WebhookReceiver/WebhookReceiver.Tests/appsettings.json'
       env:
         AppSettings.ClientSecret: "${{ secrets.ClientSecret }}"    
-    #- name: Build test project
-    #  run: dotnet build WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
     - name: Run automated unit and integration tests
       run: dotnet test WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
-      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
+      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Debug
     #Publish build artifacts to GitHub
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
       with:
         name: webhookapp
-        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
+        path: WebhookReceiver/WebhookReceiver.Service/bin/Debug/netcoreapp3.1/publish
 
   deploy:
     runs-on: windows-latest
