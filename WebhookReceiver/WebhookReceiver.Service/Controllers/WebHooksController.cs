@@ -29,9 +29,9 @@ namespace WebhookReceiver.Service.Controllers
             string clientSecret = _configuration["AppSettings:ClientSecret"];
             //string clientId = _configuration["WebhookClientId"];
             //string clientSecret = _configuration["WebhookClientSecret"];
-            string tenantId = _configuration["AppSettings:WebhookTenantId"];
+            string tenantId = _configuration["WebhookTenantId"];
             string subscriptionId = _configuration["WebhookSubscriptionId"];
-            string resourceGroupName = _configuration["WebhookResourceGroup"];
+            string resourceGroupName = _configuration["AppSettings:WebhookResourceGroup"];
 
             PullRequest result = await _codeRepo.ProcessPullRequest(payload, clientId, clientSecret, tenantId, subscriptionId, resourceGroupName);
 
@@ -39,7 +39,7 @@ namespace WebhookReceiver.Service.Controllers
         }
 
         [HttpGet("Get")]
-        public async Task<string> Get()
+        public string Get()
         {
             string message = "this works!";
 
@@ -49,7 +49,6 @@ namespace WebhookReceiver.Service.Controllers
             string clientSecret2 = _configuration["WebhookClientSecret"];
             string tenantId = _configuration["WebhookTenantId"];
             string subscriptionId = _configuration["WebhookSubscriptionId"];
-            string resourceGroupName = _configuration["WebhookResourceGroup"];
 
             message += "clientId: " + clientId + Environment.NewLine;
             message += "clientSecret: " + clientSecret + Environment.NewLine;
@@ -57,7 +56,6 @@ namespace WebhookReceiver.Service.Controllers
             message += "clientSecret2: " + clientSecret2 + Environment.NewLine;
             message += "tenantId: " + tenantId + Environment.NewLine;
             message += "subscriptionId: " + subscriptionId + Environment.NewLine;
-            message += "resourceGroupName: " + resourceGroupName + Environment.NewLine;
 
             return message;
         }
