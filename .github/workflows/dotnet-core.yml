@@ -35,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: webhookapp
-        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
+        path: WebhookReceiver/WebhookReceiver.Service/bin/Debug/netcoreapp3.1/publish
 
   deploy:
     runs-on: windows-latest
