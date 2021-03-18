@@ -38,11 +38,11 @@ namespace WebhookReceiver.Tests
             Configuration = config.Build();
 
             //Setup the repo
-            ClientId = Configuration["WebhookClientId"];
+            ClientId = Configuration["AppSettings:ClientId"];
             ClientSecret = Configuration["WebhookClientSecret"];
             TenantId = Configuration["WebhookTenantId"];
             SubscriptionId = Configuration["WebhookSubscriptionId"];
-            ResourceGroupName = Configuration["WebhookResourceGroup"];
+            ResourceGroupName = Configuration["AppSettings:WebhookResourceGroup"];
         }
 
         [TestMethod]
@@ -77,24 +77,7 @@ namespace WebhookReceiver.Tests
             Assert.AreEqual(467, pr.Id);
             Assert.AreEqual("completed", pr.Status);
             Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
-        } 
-        
-        //[TestMethod]
-        //public async Task ProcessingSample3PayloadTest()
-        //{
-        //    //Arrange
-        //    JObject payload = ReadJSON(@"/Sample/sample3.json");
-        //    CodeRepo code = new CodeRepo();
-
-        //    //Act
-        //    PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
-
-        //    //Assert
-        //    Assert.IsTrue(pr != null);
-        //    Assert.AreEqual(467, pr.Id);
-        //    Assert.AreEqual("completed", pr.Status);
-        //    Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
-        //}
+        }
 
         [TestMethod]
         public async Task ProcessingEmptyPayloadTest()
@@ -114,8 +97,6 @@ namespace WebhookReceiver.Tests
                 Assert.IsTrue(ex.ToString() != "");
             }
         }
-
-
         private JObject ReadJSON(string fileName)
         {
             JObject payload;
