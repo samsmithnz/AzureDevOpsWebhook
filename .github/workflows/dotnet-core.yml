@@ -2,9 +2,9 @@ name: .NET Core
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -29,13 +29,13 @@ jobs:
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
-      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Debug
+      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
     #Publish build artifacts to GitHub
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
       with:
         name: webhookapp
-        path: WebhookReceiver/WebhookReceiver.Service/bin/Debug/netcoreapp3.1/publish
+        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
 
   deploy:
     runs-on: windows-latest
