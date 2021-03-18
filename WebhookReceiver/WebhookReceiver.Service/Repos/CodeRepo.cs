@@ -58,6 +58,8 @@ namespace WebhookReceiver.Service.Repos
                 Title = payload["resource"]["title"]?.ToString()
             };
 
+            //TODO: Clean up Key Vault, deleting secrets and access policies
+
             //Delete the resource group
             resourceGroupName = resourceGroupName.Replace("__###__", "PR" + pr.Id.ToString());
 
