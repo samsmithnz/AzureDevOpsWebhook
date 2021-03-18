@@ -14,7 +14,7 @@ namespace WebhookReceiver.Tests
     public class WebHookControllerTests
     {
 
-        private IConfigurationRoot Configuration;
+        private readonly IConfigurationRoot Configuration;
         private string ClientId;
         private string ClientSecret;
         private string TenantId;
