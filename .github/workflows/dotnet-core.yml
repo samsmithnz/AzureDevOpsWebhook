@@ -24,6 +24,7 @@ jobs:
         files: 'WebhookReceiver/WebhookReceiver.Tests/appsettings.json'
       env:
         AppSettings.ClientSecret: "${{ secrets.ClientSecret }}"    
+        AppSettings.StorageConnectionString: "${{ secrets.STORAGECONNSTRING }}"
     - name: Run automated unit and integration tests
       run: dotnet test WebhookReceiver/WebhookReceiver.Tests/WebhookReceiver.Tests.csproj --configuration Release
 
