@@ -14,28 +14,29 @@ namespace WebhookReceiver.Tests
     public class WebHookControllerTests
     {
 
-        private readonly IConfigurationRoot Configuration;
         private string ClientId;
         private string ClientSecret;
         private string TenantId;
         private string SubscriptionId;
         private string ResourceGroupName;
+        private string KeyVaultQueueName;
+        private string StorageConnectionString;
 
         [TestInitialize]
         public void InitializeTests()
         {
             //Key vault access
-            IConfigurationBuilder config = new ConfigurationBuilder()
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder()
                .SetBasePath(AppContext.BaseDirectory)
                .AddJsonFile("appsettings.json")
                .AddUserSecrets<WebHookControllerTests>();
-            IConfigurationRoot Configuration = config.Build();
+            IConfigurationRoot Configuration = configBuilder.Build();
 
             string azureKeyVaultURL = Configuration["AppSettings:KeyVaultURL"];
             string keyVaultClientId = Configuration["AppSettings:ClientId"];
             string keyVaultClientSecret = Configuration["AppSettings:ClientSecret"];
-            config.AddAzureKeyVault(azureKeyVaultURL, keyVaultClientId, keyVaultClientSecret);
-            Configuration = config.Build();
+            configBuilder.AddAzureKeyVault(azureKeyVaultURL, keyVaultClientId, keyVaultClientSecret);
+            Configuration = configBuilder.Build();
 
             //Setup the repo
             ClientId = Configuration["AppSettings:ClientId"];
@@ -43,6 +44,8 @@ namespace WebhookReceiver.Tests
             TenantId = Configuration["WebhookTenantId"];
             SubscriptionId = Configuration["WebhookSubscriptionId"];
             ResourceGroupName = Configuration["AppSettings:WebhookResourceGroup"];
+            KeyVaultQueueName = Configuration["AppSettings:KeyVaultQueue"];
+            StorageConnectionString = Configuration["AppSettings:StorageConnectionString"];
         }
 
         [TestMethod]
@@ -53,7 +56,10 @@ namespace WebhookReceiver.Tests
             CodeRepo code = new CodeRepo();
 
             //Act
-            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+            PullRequest pr = await code.ProcessPullRequest(payload,
+                ClientId, ClientSecret,
+                TenantId, SubscriptionId, ResourceGroupName,
+                KeyVaultQueueName, StorageConnectionString);
 
             //Assert
             Assert.IsTrue(pr != null);
@@ -70,11 +76,14 @@ namespace WebhookReceiver.Tests
             CodeRepo code = new CodeRepo();
 
             //Act
-            PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+            PullRequest pr = await code.ProcessPullRequest(payload,
+                ClientId, ClientSecret,
+                TenantId, SubscriptionId, ResourceGroupName,
+                KeyVaultQueueName, StorageConnectionString);
 
             //Assert
             Assert.IsTrue(pr != null);
-            Assert.AreEqual(467, pr.Id);
+            Assert.AreEqual(549, pr.Id);
             Assert.AreEqual("completed", pr.Status);
             Assert.AreEqual("Upgraded to Dapper. Testing performance is terrible for some reason", pr.Title);
         }
@@ -84,12 +93,15 @@ namespace WebhookReceiver.Tests
         {
             //Arrange
             JObject payload = ReadJSON(@"/Sample/emptySample.json");
-            CodeRepo code = new CodeRepo();
+            CodeRepo code = new();
 
             //Act
             try
             {
-                PullRequest pr = await code.ProcessPullRequest(payload, ClientId, ClientSecret, TenantId, SubscriptionId, ResourceGroupName);
+                PullRequest pr = await code.ProcessPullRequest(payload,
+                ClientId, ClientSecret,
+                TenantId, SubscriptionId, ResourceGroupName,
+                KeyVaultQueueName, StorageConnectionString);
             }
             catch (Exception ex)
             {
@@ -97,7 +109,7 @@ namespace WebhookReceiver.Tests
                 Assert.IsTrue(ex.ToString() != "");
             }
         }
-        private JObject ReadJSON(string fileName)
+        private static JObject ReadJSON(string fileName)
         {
             JObject payload;
             // read JSON directly from a file

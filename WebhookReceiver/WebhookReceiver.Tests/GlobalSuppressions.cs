@@ -6,4 +6,6 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0063:Use simple 'using' statement", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Tests.WebHookControllerTests.ReadJSON(System.String)~Newtonsoft.Json.Linq.JObject")]
-[assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>", Scope = "member", Target = "~F:WebhookReceiver.Tests.WebHookControllerTests.Configuration")]
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Tests.WebHookControllerTests.ProcessingSamplePayloadTest~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Tests.WebHookControllerTests.ProcessingSample2PayloadTest~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Tests.WebHookControllerTests.ReadJSON(System.String)~Newtonsoft.Json.Linq.JObject")]

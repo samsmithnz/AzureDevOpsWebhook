@@ -1,18 +1,24 @@
-﻿using Microsoft.Azure.Management.Fluent;
+﻿using Microsoft.Azure.Management.AppService.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WebhookReceiver.Service.Models;
+using fluent = Microsoft.Azure.Management.Fluent;
+using queue = Azure.Storage.Queues;
 
 namespace WebhookReceiver.Service.Repos
 {
     public class CodeRepo : ICodeRepo
     {
-        public async Task<PullRequest> ProcessPullRequest(JObject payload, 
-                string clientId, string clientSecret, 
-                string tenantId, string subscriptionId, string resourceGroupName, 
+        public async Task<PullRequest> ProcessPullRequest(JObject payload,
+                string clientId, string clientSecret,
+                string tenantId, string subscriptionId, string resourceGroupName,
                 string keyVaultQueueName, string storageConnectionString)
         {
             //Validate the payload
@@ -68,20 +74,45 @@ namespace WebhookReceiver.Service.Repos
                 Status = payload["resource"]["status"]?.ToString(),
                 Title = payload["resource"]["title"]?.ToString()
             };
-
-            //Delete the resource group
             resourceGroupName = resourceGroupName.Replace("__###__", "PR" + pr.Id.ToString());
 
+            //If the PR is completed or abandoned, clean up the secrets and permissions from key vault and then delete the resource group/resources
             if (pr != null && (pr.Status == "completed" || pr.Status == "abandoned"))
             {
-                var creds = new AzureCredentialsFactory().FromServicePrincipal(clientId, clientSecret, tenantId, AzureEnvironment.AzureGlobalCloud);
-                var azure = Azure.Authenticate(creds).WithSubscription(subscriptionId);
+                AzureCredentials creds = new AzureCredentialsFactory().FromServicePrincipal(clientId, clientSecret, tenantId, AzureEnvironment.AzureGlobalCloud);
+                fluent.IAzure azure = fluent.Azure.Authenticate(creds).WithSubscription(subscriptionId);
 
-                //Get identities of the web apps and their slots
+                RestClient _restClient = RestClient
+                   .Configure()
+                   .WithEnvironment(AzureEnvironment.AzureGlobalCloud)
+                   .WithLogLevel(HttpLoggingDelegatingHandler.Level.Basic)
+                   .WithCredentials(creds)
+                   .Build();
+
+                ResourceManagementClient resourceManagementClient = new ResourceManagementClient(_restClient)
+                {
+                    SubscriptionId = subscriptionId
+                };
+          
+                //Look for web apps in the resource group
+                Microsoft.Rest.Azure.IPage<GenericResourceInner> resources = await resourceManagementClient.Resources.ListByResourceGroupAsync(resourceGroupName);
+                List<string> identities = new List<string>();
+                foreach (GenericResourceInner item in resources)
+                {
+                    if (item.Type == "Microsoft.Web/sites" | item.Type == "Microsoft.Web/sites/slots")
+                    {
+                        //Get identities of the web apps and their slots
+                        identities.Add(item.Identity.PrincipalId.ToString());
+                    }
+                }
 
                 //insert the identities into a storage queue
+                foreach (string identity in identities)
+                {
+                    InsertMessage(storageConnectionString, keyVaultQueueName, identity);
+                }
 
-
+                //Delete the resource group
                 bool rgExists = await azure.ResourceGroups.ContainAsync(resourceGroupName);
                 if (rgExists == true)
                 {
@@ -92,13 +123,10 @@ namespace WebhookReceiver.Service.Repos
             return pr;
         }
 
-        private void InsertMessage(string storageConnectionString, string queueName, string message)
+        private void InsertMessage(string connectionString, string queueName, string message)
         {
-            // Get the connection string from app settings
-            string connectionString = ConfigurationManager.AppSettings["StorageConnectionString"];
-
             // Instantiate a QueueClient which will be used to create and manipulate the queue
-            QueueClient queueClient = new QueueClient(connectionString, queueName);
+            queue.QueueClient queueClient = new queue.QueueClient(connectionString, queueName);
 
             // Create the queue if it doesn't already exist
             queueClient.CreateIfNotExists();
@@ -115,9 +143,9 @@ namespace WebhookReceiver.Service.Repos
 
     public interface ICodeRepo
     {
-        Task<PullRequest> ProcessPullRequest(JObject payload, 
-                string clientId, string clientSecret, 
-                string tenantId, string subscriptionId, string resourceGroupName, 
+        Task<PullRequest> ProcessPullRequest(JObject payload,
+                string clientId, string clientSecret,
+                string tenantId, string subscriptionId, string resourceGroupName,
                 string keyVaultQueueName, string storageConnectionString);
     }
 
