@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 5.0.100
 
     #Build and test service
     - name: Variable Substitution appsettings file for tests
@@ -29,17 +29,18 @@ jobs:
 
     #Publish dotnet objects
     - name: DotNET Publish Webhook
-      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release
+      run: dotnet publish WebhookReceiver/WebhookReceiver.Service/WebhookReceiver.Service.csproj --configuration Release --self-contained true --runtime win-x86
     #Publish build artifacts to GitHub
     - name: Upload web service build artifacts back to GitHub
       uses: actions/upload-artifact@master
       with:
         name: webhookapp
-        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/netcoreapp3.1/publish
+        path: WebhookReceiver/WebhookReceiver.Service/bin/Release/net5.0/publish
 
   deploy:
     runs-on: windows-latest
     needs: build    
+    if: github.ref == 'refs/heads/main'
 
     steps:
     - name: Log into Azure
