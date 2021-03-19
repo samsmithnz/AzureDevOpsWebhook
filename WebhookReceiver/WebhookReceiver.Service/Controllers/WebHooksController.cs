@@ -33,6 +33,8 @@ namespace WebhookReceiver.Service.Controllers
             string subscriptionId = _configuration["WebhookSubscriptionId"];
             string resourceGroupName = _configuration["AppSettings:WebhookResourceGroup"];
 
+            //Add identities to queue, if they don't exist.
+
             PullRequest result = await _codeRepo.ProcessPullRequest(payload, clientId, clientSecret, tenantId, subscriptionId, resourceGroupName);
 
             return (result != null) ? new OkResult() : new StatusCodeResult(500);

@@ -10,7 +10,10 @@ namespace WebhookReceiver.Service.Repos
 {
     public class CodeRepo : ICodeRepo
     {
-        public async Task<PullRequest> ProcessPullRequest(JObject payload, string clientId, string clientSecret, string tenantId, string subscriptionId, string resourceGroupName)
+        public async Task<PullRequest> ProcessPullRequest(JObject payload, 
+                string clientId, string clientSecret, 
+                string tenantId, string subscriptionId, string resourceGroupName, 
+                string keyVaultQueueName, string storageConnectionString)
         {
             //Validate the payload
             if (payload["resource"] == null)
@@ -49,6 +52,14 @@ namespace WebhookReceiver.Service.Repos
             {
                 throw new Exception("Misconfiguration: resource group is null");
             }
+            else if (string.IsNullOrEmpty(keyVaultQueueName) == true)
+            {
+                throw new Exception("Misconfiguration: storage queue name is null");
+            }
+            else if (string.IsNullOrEmpty(storageConnectionString) == true)
+            {
+                throw new Exception("Misconfiguration: storage connection string is null");
+            }
 
             //Get pull request details
             PullRequest pr = new PullRequest
@@ -58,8 +69,6 @@ namespace WebhookReceiver.Service.Repos
                 Title = payload["resource"]["title"]?.ToString()
             };
 
-            //TODO: Clean up Key Vault, deleting secrets and access policies
-
             //Delete the resource group
             resourceGroupName = resourceGroupName.Replace("__###__", "PR" + pr.Id.ToString());
 
@@ -67,6 +76,11 @@ namespace WebhookReceiver.Service.Repos
             {
                 var creds = new AzureCredentialsFactory().FromServicePrincipal(clientId, clientSecret, tenantId, AzureEnvironment.AzureGlobalCloud);
                 var azure = Azure.Authenticate(creds).WithSubscription(subscriptionId);
+
+                //Get identities of the web apps and their slots
+
+                //insert the identities into a storage queue
+
 
                 bool rgExists = await azure.ResourceGroups.ContainAsync(resourceGroupName);
                 if (rgExists == true)
@@ -77,11 +91,34 @@ namespace WebhookReceiver.Service.Repos
 
             return pr;
         }
+
+        private void InsertMessage(string storageConnectionString, string queueName, string message)
+        {
+            // Get the connection string from app settings
+            string connectionString = ConfigurationManager.AppSettings["StorageConnectionString"];
+
+            // Instantiate a QueueClient which will be used to create and manipulate the queue
+            QueueClient queueClient = new QueueClient(connectionString, queueName);
+
+            // Create the queue if it doesn't already exist
+            queueClient.CreateIfNotExists();
+
+            if (queueClient.Exists())
+            {
+                // Send a message to the queue
+                queueClient.SendMessage(message);
+            }
+
+            Console.WriteLine($"Inserted: {message}");
+        }
     }
 
     public interface ICodeRepo
     {
-        Task<PullRequest> ProcessPullRequest(JObject payload, string clientId, string clientSecret, string tenantId, string subscriptionId, string resourceGroupName);
+        Task<PullRequest> ProcessPullRequest(JObject payload, 
+                string clientId, string clientSecret, 
+                string tenantId, string subscriptionId, string resourceGroupName, 
+                string keyVaultQueueName, string storageConnectionString);
     }
 
 }
