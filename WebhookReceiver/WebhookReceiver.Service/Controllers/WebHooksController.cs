@@ -32,8 +32,14 @@ namespace WebhookReceiver.Service.Controllers
             string tenantId = _configuration["WebhookTenantId"];
             string subscriptionId = _configuration["WebhookSubscriptionId"];
             string resourceGroupName = _configuration["AppSettings:WebhookResourceGroup"];
+            string keyVaultQueueName = _configuration["AppSettings:KeyVaultQueue"];
+            string storageConnectionString = _configuration["AppSettings:StorageConnectionString"];
 
-            PullRequest result = await _codeRepo.ProcessPullRequest(payload, clientId, clientSecret, tenantId, subscriptionId, resourceGroupName);
+            //Add identities to queue, if they don't exist.
+
+            PullRequest result = await _codeRepo.ProcessPullRequest(payload, 
+                clientId, clientSecret, tenantId, subscriptionId, resourceGroupName,
+                keyVaultQueueName, storageConnectionString);
 
             return (result != null) ? new OkResult() : new StatusCodeResult(500);
         }
