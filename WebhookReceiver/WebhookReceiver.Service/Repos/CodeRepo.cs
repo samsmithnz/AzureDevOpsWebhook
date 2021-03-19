@@ -93,29 +93,29 @@ namespace WebhookReceiver.Service.Repos
                 {
                     SubscriptionId = subscriptionId
                 };
-          
+
                 //Look for web apps in the resource group
-                Microsoft.Rest.Azure.IPage<GenericResourceInner> resources = await resourceManagementClient.Resources.ListByResourceGroupAsync(resourceGroupName);
-                List<string> identities = new List<string>();
-                foreach (GenericResourceInner item in resources)
+                bool resourceGroupExists = await azure.ResourceGroups.ContainAsync(resourceGroupName);
+                if (resourceGroupExists == true)
                 {
-                    if (item.Type == "Microsoft.Web/sites" | item.Type == "Microsoft.Web/sites/slots")
+                    Microsoft.Rest.Azure.IPage<GenericResourceInner> resources = await resourceManagementClient.Resources.ListByResourceGroupAsync(resourceGroupName);
+                    List<string> identities = new List<string>();
+                    foreach (GenericResourceInner item in resources)
                     {
-                        //Get identities of the web apps and their slots
-                        identities.Add(item.Identity.PrincipalId.ToString());
+                        if (item.Type == "Microsoft.Web/sites" | item.Type == "Microsoft.Web/sites/slots")
+                        {
+                            //Get identities of the web apps and their slots
+                            identities.Add(item.Identity.PrincipalId.ToString());
+                        }
                     }
-                }
 
-                //insert the identities into a storage queue
-                foreach (string identity in identities)
-                {
-                    InsertMessage(storageConnectionString, keyVaultQueueName, identity);
-                }
+                    //insert the identities into a storage queue
+                    foreach (string identity in identities)
+                    {
+                        InsertMessage(storageConnectionString, keyVaultQueueName, identity);
+                    }
 
-                //Delete the resource group
-                bool rgExists = await azure.ResourceGroups.ContainAsync(resourceGroupName);
-                if (rgExists == true)
-                {
+                    //Delete the resource group
                     await azure.ResourceGroups.DeleteByNameAsync(resourceGroupName);
                 }
             }
