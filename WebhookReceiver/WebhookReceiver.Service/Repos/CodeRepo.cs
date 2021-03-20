@@ -19,7 +19,7 @@ namespace WebhookReceiver.Service.Repos
         public async Task<PullRequest> ProcessPullRequest(JObject payload,
                 string clientId, string clientSecret,
                 string tenantId, string subscriptionId, string resourceGroupName,
-                string keyVaultQueueName, string storageConnectionString)
+                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString)
         {
             //Validate the payload
             if (payload["resource"] == null)
@@ -60,7 +60,11 @@ namespace WebhookReceiver.Service.Repos
             }
             else if (string.IsNullOrEmpty(keyVaultQueueName) == true)
             {
-                throw new Exception("Misconfiguration: storage queue name is null");
+                throw new Exception("Misconfiguration: storage policies queue name is null");
+            }
+            else if (string.IsNullOrEmpty(keyVaultSecretsQueueName) == true)
+            {
+                throw new Exception("Misconfiguration: storage secrets queue name is null");
             }
             else if (string.IsNullOrEmpty(storageConnectionString) == true)
             {
@@ -114,6 +118,8 @@ namespace WebhookReceiver.Service.Repos
                     {
                         InsertMessage(storageConnectionString, keyVaultQueueName, identity);
                     }
+                    //Add the PR name to a queue
+                    InsertMessage(storageConnectionString, keyVaultSecretsQueueName, "PR" + pr.Id.ToString());
 
                     //Delete the resource group
                     await azure.ResourceGroups.DeleteByNameAsync(resourceGroupName);
@@ -123,7 +129,7 @@ namespace WebhookReceiver.Service.Repos
             return pr;
         }
 
-        private void InsertMessage(string connectionString, string queueName, string message)
+        private static void InsertMessage(string connectionString, string queueName, string message)
         {
             // Instantiate a QueueClient which will be used to create and manipulate the queue
             queue.QueueClient queueClient = new queue.QueueClient(connectionString, queueName);
@@ -146,7 +152,7 @@ namespace WebhookReceiver.Service.Repos
         Task<PullRequest> ProcessPullRequest(JObject payload,
                 string clientId, string clientSecret,
                 string tenantId, string subscriptionId, string resourceGroupName,
-                string keyVaultQueueName, string storageConnectionString);
+                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString);
     }
 
 }

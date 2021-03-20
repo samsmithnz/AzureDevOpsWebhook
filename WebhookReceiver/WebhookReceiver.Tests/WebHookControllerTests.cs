@@ -20,6 +20,7 @@ namespace WebhookReceiver.Tests
         private string SubscriptionId;
         private string ResourceGroupName;
         private string KeyVaultQueueName;
+        private string KeyVaultSecretsQueueName;
         private string StorageConnectionString;
 
         [TestInitialize]
@@ -45,6 +46,7 @@ namespace WebhookReceiver.Tests
             SubscriptionId = Configuration["WebhookSubscriptionId"];
             ResourceGroupName = Configuration["AppSettings:WebhookResourceGroup"];
             KeyVaultQueueName = Configuration["AppSettings:KeyVaultQueue"];
+            KeyVaultSecretsQueueName = Configuration["AppSettings:KeyVaultSecretsQueue"];
             StorageConnectionString = Configuration["AppSettings:StorageConnectionString"];
         }
 
@@ -59,7 +61,7 @@ namespace WebhookReceiver.Tests
             PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
 
             //Assert
             Assert.IsTrue(pr != null);
@@ -79,7 +81,7 @@ namespace WebhookReceiver.Tests
             PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
 
             //Assert
             Assert.IsTrue(pr != null);
@@ -101,7 +103,7 @@ namespace WebhookReceiver.Tests
                 PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
             }
             catch (Exception ex)
             {
