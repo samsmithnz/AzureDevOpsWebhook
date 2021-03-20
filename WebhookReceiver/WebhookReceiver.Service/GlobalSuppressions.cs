@@ -5,5 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Service.Repos.CodeRepo.ProcessPullRequest(Newtonsoft.Json.Linq.JObject,System.String,System.String,System.String,System.String,System.String,System.String,System.String)~System.Threading.Tasks.Task{WebhookReceiver.Service.Models.PullRequest}")]
 [assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Service.Repos.CodeRepo.InsertMessage(System.String,System.String,System.String)")]
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>", Scope = "member", Target = "~M:WebhookReceiver.Service.Repos.CodeRepo.ProcessPullRequest(Newtonsoft.Json.Linq.JObject,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)~System.Threading.Tasks.Task{WebhookReceiver.Service.Models.PullRequest}")]
