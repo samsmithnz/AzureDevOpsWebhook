@@ -58,4 +58,4 @@ jobs:
       with:
         app-name: samsapp-data-eu-webhook
         package: webhookapp
-    - run: az webapp config appsettings set --name samsapp-data-eu-webhook --resource-group SamLearnsAzureData --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}"  
+    - run: az webapp config appsettings set --name samsapp-data-eu-webhook --resource-group SamLearnsAzureData --settings "AppSettings:ClientSecret=${{ secrets.ClientSecret }}" "AppSettings:StorageConnectionString=${{ secrets.STORAGECONNSTRING }}"  
