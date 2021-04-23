@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebhookReceiver.Service.Models;
 using fluent = Microsoft.Azure.Management.Fluent;
@@ -19,7 +21,8 @@ namespace WebhookReceiver.Service.Repos
         public async Task<PullRequest> ProcessPullRequest(JObject payload,
                 string clientId, string clientSecret,
                 string tenantId, string subscriptionId, string resourceGroupName,
-                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString)
+                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString,
+                string goDaddyAPIKey, string goDaddyAPISecret)
         {
             //Validate the payload
             if (payload["resource"] == null)
@@ -70,6 +73,14 @@ namespace WebhookReceiver.Service.Repos
             {
                 throw new Exception("Misconfiguration: storage connection string is null");
             }
+            else if (string.IsNullOrEmpty(goDaddyAPIKey) == true)
+            {
+                throw new Exception("Misconfiguration: godaddy API key is null");
+            }
+            else if (string.IsNullOrEmpty(goDaddyAPISecret) == true)
+            {
+                throw new Exception("Misconfiguration: godaddy API secret is null");
+            }
 
             //Get pull request details
             PullRequest pr = new PullRequest
@@ -83,6 +94,7 @@ namespace WebhookReceiver.Service.Repos
             //If the PR is completed or abandoned, clean up the secrets and permissions from key vault and then delete the resource group/resources
             if (pr != null && (pr.Status == "completed" || pr.Status == "abandoned"))
             {
+                //Clean up the key vault
                 AzureCredentials creds = new AzureCredentialsFactory().FromServicePrincipal(clientId, clientSecret, tenantId, AzureEnvironment.AzureGlobalCloud);
                 fluent.IAzure azure = fluent.Azure.Authenticate(creds).WithSubscription(subscriptionId);
 
@@ -93,6 +105,16 @@ namespace WebhookReceiver.Service.Repos
                    .WithCredentials(creds)
                    .Build();
 
+                //Clean up the DNS settings in GoDaddy
+                string prId = pr.Id.ToString();
+                string web1DNS = $"pr{prId}";
+                string web2DNS = $"pr{prId}2";
+                string fdDNS = $"pr{prId}fd";
+
+                //Delete the items from GoDaddy
+                await CleanUpGoDaddy(goDaddyAPIKey, goDaddyAPISecret, web1DNS, web2DNS, fdDNS);
+
+                //process web apps to remove identities
                 ResourceManagementClient resourceManagementClient = new ResourceManagementClient(_restClient)
                 {
                     SubscriptionId = subscriptionId
@@ -145,6 +167,35 @@ namespace WebhookReceiver.Service.Repos
 
             Console.WriteLine($"Inserted: {message}");
         }
+
+        public async static Task<bool> CleanUpGoDaddy(string goDaddyKey, string goDaddySecret, string web1DNS, string web2DNS, string fdDNS)
+        {
+            HttpClient client = new HttpClient
+            {
+                BaseAddress = new Uri("https://api.godaddy.com/")
+            };
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("sso-key", goDaddyKey + ":" + goDaddySecret);
+
+            string godaddy_domain = "samlearnsazure.com";
+            string godaddy_type = "CNAME";
+
+            Uri url1 = new Uri($"v1/domains/{godaddy_domain}/records/{godaddy_type}/{web1DNS}", UriKind.Relative);
+            Uri url2 = new Uri($"v1/domains/{godaddy_domain}/records/{godaddy_type}/{web2DNS}", UriKind.Relative);
+            Uri url3 = new Uri($"v1/domains/{godaddy_domain}/records/{godaddy_type}/{fdDNS}", UriKind.Relative);
+
+            HttpResponseMessage response1 = await client.DeleteAsync(url1);
+            HttpResponseMessage response2 = await client.DeleteAsync(url2);
+            HttpResponseMessage response3 = await client.DeleteAsync(url3);
+
+            if (response1.IsSuccessStatusCode == true & response2.IsSuccessStatusCode == true & response3.IsSuccessStatusCode == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public interface ICodeRepo
@@ -152,7 +203,8 @@ namespace WebhookReceiver.Service.Repos
         Task<PullRequest> ProcessPullRequest(JObject payload,
                 string clientId, string clientSecret,
                 string tenantId, string subscriptionId, string resourceGroupName,
-                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString);
+                string keyVaultQueueName, string keyVaultSecretsQueueName, string storageConnectionString,
+                string goDaddyAPIKey, string goDaddyAPISecret);
     }
 
 }

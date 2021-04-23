@@ -22,6 +22,8 @@ namespace WebhookReceiver.Tests
         private string KeyVaultQueueName;
         private string KeyVaultSecretsQueueName;
         private string StorageConnectionString;
+        private string GoDaddyKey;
+        private string GoDaddySecret;
 
         [TestInitialize]
         public void InitializeTests()
@@ -48,6 +50,10 @@ namespace WebhookReceiver.Tests
             KeyVaultQueueName = Configuration["AppSettings:KeyVaultQueue"];
             KeyVaultSecretsQueueName = Configuration["AppSettings:KeyVaultSecretsQueue"];
             StorageConnectionString = Configuration["AppSettings:StorageConnectionString"];
+            KeyVaultSecretsQueueName = Configuration["AppSettings:KeyVaultSecretsQueue"];
+            StorageConnectionString = Configuration["AppSettings:StorageConnectionString"];
+            GoDaddyKey = Configuration["GoDaddyAPIKey"];
+            GoDaddySecret = Configuration["GoDaddyAPISecret"];
         }
 
         [TestMethod]
@@ -61,7 +67,8 @@ namespace WebhookReceiver.Tests
             PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString,
+                GoDaddyKey, GoDaddySecret);
 
             //Assert
             Assert.IsTrue(pr != null);
@@ -81,7 +88,8 @@ namespace WebhookReceiver.Tests
             PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString,
+                GoDaddyKey, GoDaddySecret);
 
             //Assert
             Assert.IsTrue(pr != null);
@@ -103,7 +111,8 @@ namespace WebhookReceiver.Tests
                 PullRequest pr = await code.ProcessPullRequest(payload,
                 ClientId, ClientSecret,
                 TenantId, SubscriptionId, ResourceGroupName,
-                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString);
+                KeyVaultQueueName, KeyVaultSecretsQueueName, StorageConnectionString,
+                GoDaddyKey, GoDaddySecret);
             }
             catch (Exception ex)
             {
