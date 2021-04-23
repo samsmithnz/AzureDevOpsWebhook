@@ -50,11 +50,17 @@ namespace WebhookReceiver.Service.Controllers
         [HttpGet("Get")]
         public async Task<string> Get()
         {
-            string message = "this works! "; 
+            string message = "this works! ";  
+            //string clientId = _configuration["AppSettings:ClientId"];
+            //string clientSecret = _configuration["AppSettings:ClientSecret"];
+            //string clientId2 = _configuration["WebhookClientId"];
+            //string clientSecret2 = _configuration["WebhookClientSecret"];
+            string tenantId = _configuration["WebhookTenantId"];
+            string subscriptionId = _configuration["WebhookSubscriptionId"];
             string goDaddyKey = _configuration["GoDaddyAPIKey"];
             string goDaddySecret = _configuration["GoDaddyAPISecret"];
 
-            for (int i = 475; i <= 552; i++)
+            for (int i = 540; i <= 552; i++)
             {
                 string web1 = "pr" + i.ToString();
                 string web2 = "pr" + i.ToString() + "2";
@@ -68,20 +74,11 @@ namespace WebhookReceiver.Service.Controllers
                 }
             }
 
-            //message += result.ToString();
-
-            string clientId = _configuration["AppSettings:ClientId"];
-            string clientSecret = _configuration["AppSettings:ClientSecret"];
-            string clientId2 = _configuration["WebhookClientId"];
-            string clientSecret2 = _configuration["WebhookClientSecret"];
-            string tenantId = _configuration["WebhookTenantId"];
-            string subscriptionId = _configuration["WebhookSubscriptionId"];
-
             message += Environment.NewLine;
-            message += "clientId: " + clientId + Environment.NewLine;
-            message += "clientSecret: " + clientSecret + Environment.NewLine;
-            message += "clientId2: " + clientId2 + Environment.NewLine;
-            message += "clientSecret2: " + clientSecret2 + Environment.NewLine;
+            //message += "clientId: " + clientId + Environment.NewLine;
+            //message += "clientSecret: " + clientSecret + Environment.NewLine;
+            //message += "clientId2: " + clientId2 + Environment.NewLine;
+            //message += "clientSecret2: " + clientSecret2 + Environment.NewLine;
             message += "tenantId: " + tenantId + Environment.NewLine;
             message += "subscriptionId: " + subscriptionId + Environment.NewLine;
 

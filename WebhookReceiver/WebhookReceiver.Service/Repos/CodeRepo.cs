@@ -6,6 +6,7 @@ using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -191,8 +192,27 @@ namespace WebhookReceiver.Service.Repos
             {
                 return true;
             }
+            else if (response1.StatusCode == System.Net.HttpStatusCode.NotFound | response2.StatusCode == System.Net.HttpStatusCode.NotFound | response3.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return true;
+            }
             else
             {
+                if (response1.IsSuccessStatusCode == false)
+                {
+                    Debug.WriteLine("response1 failed");
+                    Debug.WriteLine(response1.Content.ToString());
+                }
+                if (response2.IsSuccessStatusCode == false)
+                {
+                    Debug.WriteLine("response2 failed");
+                    Debug.WriteLine(response2.Content.ToString());
+                }
+                if (response3.IsSuccessStatusCode == false)
+                {
+                    Debug.WriteLine("response3 failed");
+                    Debug.WriteLine(response3.Content.ToString());
+                }
                 return false;
             }
         }
